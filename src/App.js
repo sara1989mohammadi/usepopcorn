@@ -3,10 +3,12 @@ import StarRating from "./StarRating";
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 const KEY = "7a607a88";
+
 export default function App() {
   const [query, setQuery] = useState("interstellar");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
@@ -92,6 +94,7 @@ export default function App() {
 }
 function MovieDetails({ id, onCloseMovie, onAddWatched }) {
   const [movie, setMovie] = useState([]);
+  const [userRating, setUserRating] = useState("");
   const {
     Title: title,
     Year: year,
@@ -112,6 +115,7 @@ function MovieDetails({ id, onCloseMovie, onAddWatched }) {
       poster,
       imdbRating: Number(imdbRating),
       runtime: Number(runtime.split("").at(0)),
+      userRating,
     };
     onAddWatched(newMovie);
     onCloseMovie();
@@ -150,10 +154,12 @@ function MovieDetails({ id, onCloseMovie, onAddWatched }) {
       </header>
       <section>
         <div className="rating">
-          <StarRating maxRating={10} size={24} />
-          <button className="btn-add" onClick={handelAdd}>
-            +Add to list watched
-          </button>
+          <StarRating maxRating={10} size={24} onSetRating={setUserRating} />
+          {userRating > 0 && (
+            <button className="btn-add" onClick={handelAdd}>
+              +Add to list watched
+            </button>
+          )}
         </div>
         <p>
           <em>{plot}</em>
