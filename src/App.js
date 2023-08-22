@@ -80,6 +80,7 @@ export default function App() {
               id={selectedId}
               onCloseMovie={handelCloseMovie}
               onAddWatched={handelAddWatched}
+              watched={watched}
             />
           ) : (
             <>
@@ -92,9 +93,11 @@ export default function App() {
     </>
   );
 }
-function MovieDetails({ id, onCloseMovie, onAddWatched }) {
+function MovieDetails({ id, onCloseMovie, onAddWatched, watched }) {
   const [movie, setMovie] = useState([]);
   const [userRating, setUserRating] = useState("");
+  const isWatched = watched.map((movie) => movie.imdbID).includes(id);
+  console.log(isWatched);
   const {
     Title: title,
     Year: year,
@@ -154,11 +157,21 @@ function MovieDetails({ id, onCloseMovie, onAddWatched }) {
       </header>
       <section>
         <div className="rating">
-          <StarRating maxRating={10} size={24} onSetRating={setUserRating} />
-          {userRating > 0 && (
-            <button className="btn-add" onClick={handelAdd}>
-              +Add to list watched
-            </button>
+          {!isWatched ? (
+            <>
+              <StarRating
+                maxRating={10}
+                size={24}
+                onSetRating={setUserRating}
+              />
+              {userRating > 0 && (
+                <button className="btn-add" onClick={handelAdd}>
+                  +Add to list watched
+                </button>
+              )}{" "}
+            </>
+          ) : (
+            <p>test</p>
           )}
         </div>
         <p>
@@ -286,7 +299,7 @@ function WatchedMoviesList({ watched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatchedMovies movie={movie} />
+        <WatchedMovies movie={movie} key={movie.imdbID} />
       ))}
     </ul>
   );
