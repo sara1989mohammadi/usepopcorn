@@ -14,8 +14,6 @@ export default function App() {
   const [selectedId, setSelectedId] = useState(null);
 
   function handelSelectMovie(id) {
-    console.log(id);
-    console.log(selectedId);
     setSelectedId((selectedId) => (selectedId === id ? null : id));
   }
 
@@ -97,7 +95,6 @@ function MovieDetails({ id, onCloseMovie, onAddWatched, watched }) {
   const [movie, setMovie] = useState([]);
   const [userRating, setUserRating] = useState("");
   const isWatched = watched.map((movie) => movie.imdbID).includes(id);
-  console.log(isWatched);
   const {
     Title: title,
     Year: year,
