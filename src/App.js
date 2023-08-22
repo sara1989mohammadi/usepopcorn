@@ -20,6 +20,9 @@ export default function App() {
   function handelCloseMovie(id) {
     setSelectedId(null);
   }
+  function handelAddWatched(movie) {
+    setWatched((watched) => [...watched, movie]);
+  }
 
   useEffect(
     function () {
@@ -71,7 +74,11 @@ export default function App() {
 
         <Box>
           {selectedId ? (
-            <MovieDetails id={selectedId} onCloseMovie={handelCloseMovie} />
+            <MovieDetails
+              id={selectedId}
+              onCloseMovie={handelCloseMovie}
+              onAddWatched={handelAddWatched}
+            />
           ) : (
             <>
               <WatchedSummary watched={watched} />
@@ -83,7 +90,7 @@ export default function App() {
     </>
   );
 }
-function MovieDetails({ id, onCloseMovie }) {
+function MovieDetails({ id, onCloseMovie, onAddWatched }) {
   const [movie, setMovie] = useState([]);
   const {
     Title: title,
@@ -97,7 +104,18 @@ function MovieDetails({ id, onCloseMovie }) {
     Director: director,
     Genre: genre,
   } = movie;
-
+  function handelAdd() {
+    const newMovie = {
+      imdbID: id,
+      title,
+      year,
+      poster,
+      imdbRating: Number(imdbRating),
+      runtime: Number(runtime.split("").at(0)),
+    };
+    onAddWatched(newMovie);
+    onCloseMovie();
+  }
   useEffect(
     function () {
       async function getDetails() {
@@ -133,6 +151,9 @@ function MovieDetails({ id, onCloseMovie }) {
       <section>
         <div className="rating">
           <StarRating maxRating={10} size={24} />
+          <button className="btn-add" onClick={handelAdd}>
+            +Add to list watched
+          </button>
         </div>
         <p>
           <em>{plot}</em>
@@ -267,8 +288,8 @@ function WatchedMoviesList({ watched }) {
 function WatchedMovies({ movie }) {
   return (
     <li key={movie.imdbID}>
-      <img src={movie.Poster} alt={`${movie.Title} poster`} />
-      <h3>{movie.Title}</h3>
+      <img src={movie.poster} alt={`${movie.title} poster`} />
+      <h3>{movie.title}</h3>
       <div>
         <p>
           <span>⭐️</span>
