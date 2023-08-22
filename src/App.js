@@ -84,7 +84,7 @@ export default function App() {
   );
 }
 function MovieDetails({ id, onCloseMovie }) {
-  const [movie, setMovie] = useState({});
+  const [movie, setMovie] = useState([]);
   const {
     Title: title,
     Year: year,
@@ -98,14 +98,19 @@ function MovieDetails({ id, onCloseMovie }) {
     Genre: genre,
   } = movie;
 
-  useEffect(function () {
-    async function getDetails() {
-      const res = await fetch(`http://www.omdbapi.com/?apikey=${KEY}&i=${id}`);
-      const data = await res.json();
-      setMovie(data); // eslint-disable-line no-console
-    }
-    getDetails();
-  }, []);
+  useEffect(
+    function () {
+      async function getDetails() {
+        const res = await fetch(
+          `http://www.omdbapi.com/?apikey=${KEY}&i=${id}`
+        );
+        const data = await res.json();
+        setMovie(data); // eslint-disable-line no-console
+      }
+      getDetails();
+    },
+    [id]
+  );
   return (
     <div className="details">
       <header>
