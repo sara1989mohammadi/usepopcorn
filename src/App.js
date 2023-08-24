@@ -16,7 +16,9 @@ export default function App() {
   function handelSelectMovie(id) {
     setSelectedId((selectedId) => (selectedId === id ? null : id));
   }
-
+  function handelRemoveWatched(id) {
+    setWatched((watched) => watched.filter((movie) => movie.imdbID !== id));
+  }
   function handelCloseMovie(id) {
     setSelectedId(null);
   }
@@ -83,7 +85,10 @@ export default function App() {
           ) : (
             <>
               <WatchedSummary watched={watched} />
-              <WatchedMoviesList watched={watched} />
+              <WatchedMoviesList
+                watched={watched}
+                handelRemoveWatched={handelRemoveWatched}
+              />
             </>
           )}
         </Box>
@@ -281,11 +286,11 @@ function WatchedSummary({ watched }) {
         </p>
         <p>
           <span>⭐️</span>
-          <span>{avgImdbRating}</span>
+          <span>{avgImdbRating.toFixed(2)}</span>
         </p>
         <p>
           <span>🌟</span>
-          <span>{avgUserRating}</span>
+          <span>{avgUserRating.toFixed(2)}</span>
         </p>
         <p>
           <span>⏳</span>
@@ -296,16 +301,20 @@ function WatchedSummary({ watched }) {
   );
 }
 
-function WatchedMoviesList({ watched }) {
+function WatchedMoviesList({ watched, handelRemoveWatched }) {
   return (
     <ul className="list">
       {watched.map((movie) => (
-        <WatchedMovies movie={movie} key={movie.imdbID} />
+        <WatchedMovies
+          movie={movie}
+          key={movie.imdbID}
+          handelRemoveWatched={handelRemoveWatched}
+        />
       ))}
     </ul>
   );
 }
-function WatchedMovies({ movie }) {
+function WatchedMovies({ movie, handelRemoveWatched }) {
   return (
     <li key={movie.imdbID}>
       <img src={movie.poster} alt={`${movie.title} poster`} />
@@ -323,6 +332,11 @@ function WatchedMovies({ movie }) {
           <span>⏳</span>
           <span>{movie.runtime} min</span>
         </p>
+        <button
+          className="btn-delete"
+          onClick={() => handelRemoveWatched(movie.imdbID)}>
+          X
+        </button>
       </div>
     </li>
   );
