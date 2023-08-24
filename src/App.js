@@ -98,7 +98,7 @@ function MovieDetails({ id, onCloseMovie, onAddWatched, watched }) {
   const starRatingUser = watched.find(
     (movie) => movie.imdbID === id
   )?.userRating;
-  console.log(starRatinguser);
+
   const {
     Title: title,
     Year: year,
