@@ -5,10 +5,9 @@ const average = (arr) =>
 const KEY = "7a607a88";
 
 export default function App() {
-  const [query, setQuery] = useState("interstellar");
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
@@ -57,7 +56,6 @@ export default function App() {
         return;
       }
       handelCloseMovie();
-
       fetchMovies();
       return function () {
         controller.abort();
@@ -138,6 +136,25 @@ function MovieDetails({ id, onCloseMovie, onAddWatched, watched }) {
     onAddWatched(newMovie);
     onCloseMovie();
   }
+
+  useEffect(
+    function () {
+      function callBack(e) {
+        console.log(e.code);
+        if (e.code === "Escape") {
+          onCloseMovie();
+          console.log("test");
+        }
+      }
+      document.addEventListener("keydown", callBack);
+
+      return function () {
+        document.removeEventListener("keydown", callBack);
+      };
+    },
+    [onCloseMovie]
+  );
+
   useEffect(
     function () {
       async function getDetails() {
@@ -160,7 +177,6 @@ function MovieDetails({ id, onCloseMovie, onAddWatched, watched }) {
         document.title = "usePopcorn";
       };
     },
-
     [title]
   );
   return (
@@ -242,7 +258,6 @@ function Logo() {
   );
 }
 function Search({ query, setQuery }) {
-  // const [query, setQuery] = useState("");
   return (
     <input
       className="search"
