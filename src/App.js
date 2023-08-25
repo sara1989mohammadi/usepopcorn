@@ -56,6 +56,8 @@ export default function App() {
         setError("");
         return;
       }
+      handelCloseMovie();
+
       fetchMovies();
       return function () {
         controller.abort();
