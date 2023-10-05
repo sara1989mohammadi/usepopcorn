@@ -7,10 +7,14 @@ const KEY = "7a607a88";
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
+  //const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+  const [watched, setWatched] = useState(function () {
+    const item = localStorage.getItem("watched");
+    return JSON.parse(item);
+  });
 
   function handelSelectMovie(id) {
     setSelectedId((selectedId) => (selectedId === id ? null : id));
@@ -25,6 +29,12 @@ export default function App() {
     setWatched((watched) => [...watched, movie]);
   }
 
+  useEffect(
+    function () {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
+  );
   useEffect(
     function () {
       const controller = new AbortController();
@@ -123,6 +133,7 @@ function MovieDetails({ id, onCloseMovie, onAddWatched, watched }) {
     Director: director,
     Genre: genre,
   } = movie;
+  // if (imdbRating > 8) [isTop, setTop] = useState(true);
   function handelAdd() {
     const newMovie = {
       imdbID: id,
