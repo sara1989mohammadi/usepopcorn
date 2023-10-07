@@ -7,7 +7,7 @@ const KEY = "7a607a88";
 export default function App() {
   const [query, setQuery] = useState("");
   const [selectedId, setSelectedId] = useState(null);
-  const { movies, isLoading, error } = useMovies(query, handelCloseMovie);
+  const { movies, isLoading, error } = useMovies(query);
   const [watched, setWatched] = useState(function () {
     const item = localStorage.getItem("watched");
     return JSON.parse(item);
